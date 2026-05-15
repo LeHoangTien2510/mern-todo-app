@@ -1,22 +1,11 @@
 version: '3.8'
 
 services:
-  mongodb:
-    image: mongo:latest
-    container_name: mongodb_todo
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ReaTiMo
-      MONGO_INITDB_ROOT_PASSWORD: hoangtien123
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-
   backend:
     build: ./backend
     restart: always
     environment:
-      - MONGO_URI=mongodb://ReaTiMo:hoangtien123@mongodb:27017/todo?authSource=admin
+      - MONGO_URI=mongodb://ReaTiMo:hoangtien123@54.221.183.93:27017/todo?authSource=admin
       - JWT_SECRET=BI_MAT
       - PORT=8000
     # THÊM PHẦN NÀY VÀO:
