@@ -31,7 +31,7 @@ pipeline {
             steps {
                 echo '=== PHÁT HIỆN THAY ĐỔI Ở BACKEND. BẮT ĐẦU BUILD & PUSH ==='
                 sh "docker pull ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${BACKEND_REPO}:latest || true"
-                sh "docker build --cache-from ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${BACKEND_REPO}:latest " +
+                sh "docker build --no-cache ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${BACKEND_REPO}:latest " +
                    "-t ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${BACKEND_REPO}:${BUILD_NUMBER} " +
                    "-t ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${BACKEND_REPO}:latest ./backend"
                 sh "docker push ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${BACKEND_REPO}:${BUILD_NUMBER}"
@@ -50,7 +50,7 @@ pipeline {
             steps {
                 echo '=== PHÁT HIỆN THAY ĐỔI Ở FRONTEND. BẮT ĐẦU BUILD & PUSH ==='
                 sh "docker pull ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${FRONTEND_REPO}:latest || true"
-                sh "docker build --cache-from ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${FRONTEND_REPO}:latest " +
+                sh "docker build ---no-cache ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${FRONTEND_REPO}:latest " +
                    "-t ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${FRONTEND_REPO}:${BUILD_NUMBER} " +
                    "-t ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${FRONTEND_REPO}:latest ./frontend"
                 sh "docker push ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${FRONTEND_REPO}:${BUILD_NUMBER}"
