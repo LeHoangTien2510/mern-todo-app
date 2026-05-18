@@ -67,12 +67,11 @@ pipeline {
             steps {
                 echo '=== BẮT ĐẦU KẾT NỐI SSH SANG EC2 K8S ĐỂ DEPLOY ==='
                 
-                // Gọi chuỗi chìa khóa SSH đã cấu hình ở Bước 1
+                // Gọi chuỗi chìa khóa SSH đã cấu hình
                 sshagent(['k8s-server-ssh']) {
-                    // Dùng lệnh ssh với cờ -o StrictHostKeyChecking=no để tự động bỏ qua xác thực vân tay lần đầu
-                    // Lệnh này sẽ đứng từ Jenkins bắn lệnh 'kubectl rollout...' sang máy EC2 K8s chạy ngầm
+                    // Xóa ${SSH_USER}@ vì SSH Agent sẽ tự động lấy user từ Credential bạn đã dán vào Jenkins
                     sh """
-                        ssh -o StrictHostKeyChecking=no ${SSH_USER}@${K8S_MASTER_IP} "
+                        ssh -o StrictHostKeyChecking=no ${K8S_MASTER_IP} "
                             echo 'Đang thực thi rollout restart trên Master Node K8s...' &&
                             kubectl rollout restart deployment todo-backend || echo 'Không có backend để restart' &&
                             kubectl rollout restart deployment todo-frontend || echo 'Không có frontend để restart' &&
