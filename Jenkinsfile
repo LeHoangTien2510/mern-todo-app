@@ -10,8 +10,6 @@ pipeline {
         
         // --- ĐIỀN IP CỦA MÁY EC2 KUBERNETES VÀO ĐÂY ---
         K8S_MASTER_IP   = '3.82.24.29' 
-        DOCKER_BUILDKIT = '1'
-        COMPOSE_DOCKER_CLI_BUILD = '1'
     }
 
     stages {
