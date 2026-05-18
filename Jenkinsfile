@@ -29,10 +29,12 @@ pipeline {
                 }
             }
             steps {
-                echo '=== PHÁT HIỆN THAY ĐỔI Ở BACKEND. BẮT ĐẦU BUILD TƯƠI (NO-CACHE) ==='
-                // Tạm thời bỏ qua lệnh docker pull để dọn sạch hoàn toàn các layer lỗi cũ
+                echo '=== PHÁT HIỆN THAY ĐỔI Ở BACKEND. BẮT ĐẦU BUILD TẬN DỤNG CACHE ==='
+                // Kéo bản latest từ Harbor về làm bộ đệm cache (|| true để nếu Harbor trống cũng không sập pipeline)
+                sh "docker pull ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${BACKEND_REPO}:latest || true"
                 
-                sh "docker build --no-cache " +
+                // Đổi --no-cache thành --cache-from để Docker build siêu tốc bằng layer cũ
+                sh "docker build --cache-from ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${BACKEND_REPO}:latest " +
                    "-t ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${BACKEND_REPO}:${BUILD_NUMBER} " +
                    "-t ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${BACKEND_REPO}:latest ./backend"
                 
@@ -50,10 +52,12 @@ pipeline {
                 }
             }
             steps {
-                echo '=== PHÁT HIỆN THAY ĐỔI Ở FRONTEND. BẮT ĐẦU BUILD TƯƠI (NO-CACHE) ==='
-                // Tạm thời bỏ qua lệnh docker pull cache vì mình đang muốn build sạch từ đầu
+                echo '=== PHÁT HIỆN THAY ĐỔI Ở FRONTEND. BẮT ĐẦU BUILD TẬN DỤNG CACHE ==='
+                // Kéo bản latest của Frontend từ Harbor về làm bộ đệm cache
+                sh "docker pull ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${FRONTEND_REPO}:latest || true"
                 
-                sh "docker build --no-cache " +
+                // Thay thế --no-cache bằng cấu hình --cache-from hướng về image latest vừa kéo
+                sh "docker build --cache-from ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${FRONTEND_REPO}:latest " +
                    "-t ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${FRONTEND_REPO}:${BUILD_NUMBER} " +
                    "-t ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${FRONTEND_REPO}:latest ./frontend"
                 
