@@ -71,7 +71,7 @@ pipeline {
                 sshagent(['k8s-server-ssh']) {
                     // Xóa ${SSH_USER}@ vì SSH Agent sẽ tự động lấy user từ Credential bạn đã dán vào Jenkins
                     sh """
-                        ssh -o StrictHostKeyChecking=no ${K8S_MASTER_IP} "
+                        ssh -o StrictHostKeyChecking=no ubuntu@${K8S_MASTER_IP} "
                             echo 'Đang thực thi rollout restart trên Master Node K8s...' &&
                             kubectl rollout restart deployment todo-backend || echo 'Không có backend để restart' &&
                             kubectl rollout restart deployment todo-frontend || echo 'Không có frontend để restart' &&
