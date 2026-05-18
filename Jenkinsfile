@@ -9,7 +9,7 @@ pipeline {
         FRONTEND_REPO   = 'mern-todo-app-frontend'
         
         // --- ĐIỀN IP CỦA MÁY EC2 KUBERNETES VÀO ĐÂY ---
-        K8S_MASTER_IP   = 'IP_CUA_MAY_EC2_K8S' 
+        K8S_MASTER_IP   = '3.82.24.29' 
     }
 
     stages {
