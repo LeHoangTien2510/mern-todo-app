@@ -29,11 +29,13 @@ pipeline {
                 }
             }
             steps {
-                echo '=== PHÁT HIỆN THAY ĐỔI Ở BACKEND. BẮT ĐẦU BUILD & PUSH ==='
-                sh "docker pull ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${BACKEND_REPO}:latest || true"
-                sh "docker build --no-cache ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${BACKEND_REPO}:latest " +
+                echo '=== PHÁT HIỆN THAY ĐỔI Ở BACKEND. BẮT ĐẦU BUILD TƯƠI (NO-CACHE) ==='
+                // Tạm thời bỏ qua lệnh docker pull để dọn sạch hoàn toàn các layer lỗi cũ
+                
+                sh "docker build --no-cache " +
                    "-t ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${BACKEND_REPO}:${BUILD_NUMBER} " +
                    "-t ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${BACKEND_REPO}:latest ./backend"
+                
                 sh "docker push ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${BACKEND_REPO}:${BUILD_NUMBER}"
                 sh "docker push ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${BACKEND_REPO}:latest"
             }
@@ -48,11 +50,13 @@ pipeline {
                 }
             }
             steps {
-                echo '=== PHÁT HIỆN THAY ĐỔI Ở FRONTEND. BẮT ĐẦU BUILD & PUSH ==='
-                sh "docker pull ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${FRONTEND_REPO}:latest || true"
-                sh "docker build ---no-cache ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${FRONTEND_REPO}:latest " +
+                echo '=== PHÁT HIỆN THAY ĐỔI Ở FRONTEND. BẮT ĐẦU BUILD TƯƠI (NO-CACHE) ==='
+                // Tạm thời bỏ qua lệnh docker pull cache vì mình đang muốn build sạch từ đầu
+                
+                sh "docker build --no-cache " +
                    "-t ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${FRONTEND_REPO}:${BUILD_NUMBER} " +
                    "-t ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${FRONTEND_REPO}:latest ./frontend"
+                
                 sh "docker push ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${FRONTEND_REPO}:${BUILD_NUMBER}"
                 sh "docker push ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${FRONTEND_REPO}:latest"
             }
